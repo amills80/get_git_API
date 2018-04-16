@@ -31,8 +31,8 @@ class Form extends React.Component {
   }
   handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Event : submitted", this.userNameInput.value);
-    // axios.get(`https://api.github.com/users/${this.state.userName}`)
+    console.log("Event : submitted", this.state.userName);
+    axios.get(`https://api.github.com/users/${this.state.userName}`);
       // .then(resp => {
       //   console.log(resp);
       // });
@@ -68,9 +68,7 @@ class App extends React.Component {
   };
   addNewCard= (cardInfo) => {
     console.log(cardInfo);
-
   }
-
   render() {
     return (
       <div>
@@ -82,5 +80,4 @@ class App extends React.Component {
 }
 
 ReactDOM.render(<App />, document.getElementById('root'));
-
 registerServiceWorker();
