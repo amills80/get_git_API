@@ -8,10 +8,10 @@ import registerServiceWorker from './registerServiceWorker';
 const Card = (props) => {
   return (
     <div>
-      <img src={props.avatar} />
+      <img src={props.avatar_url} />
       <div className="info" >
         <div id="name">{props.name}</div>
-        <div>{props.companyName}</div>
+        <div>{props.company}</div>
       </div>
     </div>
   )
@@ -20,7 +20,7 @@ const Card = (props) => {
 const CardList = (props) => {
   return (
     <div className="container">
-      {props.cards.map(card => <Card {...card} />)}
+      {props.cards.map(card => <Card key={card.id} {...card} />)}
     </div>
   );
 };
@@ -31,13 +31,12 @@ class Form extends React.Component {
   }
   handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Event : submitted", this.state.userName);
-    axios.get(`https://api.github.com/users/${this.state.userName}`);
-      // .then(resp => {
-      //   console.log(resp);
-      // });
+    axios.get(`https://api.github.com/users/${this.state.userName}`)
+      .then(resp => {
+        this.props.onSubmit(resp.data);
+        this.setState({ userName: ''});
+      });
   };
-
   render () {
     return (
        <form onSubmit={this.handleSubmit}>
@@ -53,22 +52,14 @@ class Form extends React.Component {
 
 class App extends React.Component {
   state = {
-    cards: [
-      {
-        name: "Alan Mills",
-        companyName: "Company TBA",
-        avatar: "https://avatars0.githubusercontent.com/u/8049836?v=4"
-      },
-      {
-        name: "Alan Mills",
-        companyName: "Company TBA",
-        avatar: "https://avatars0.githubusercontent.com/u/8049836?v=4"
-      }
-    ]
+    cards: []
   };
-  addNewCard= (cardInfo) => {
-    console.log(cardInfo);
-  }
+  addNewCard = (cardInfo) => {
+    this.setState(prevState => ({
+        cards: prevState.cards.concat(cardInfo)
+    }));
+  };
+
   render() {
     return (
       <div>
